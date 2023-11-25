@@ -1,0 +1,14 @@
+- iniciar un proyecto:
+> npm init
+
+- instalar un paquete:
+> npm install <paquete>
+> npm i <paquete>
+
+- instalar nodemon:
+nodemon permite autorecargar el servidor cuando hay cambios en un archivo
+(-D) instala como dependencia de desarrollo
+> npm i -D nodemon 
+
+- ejecutar aplicacion con npm
+> npm run <dev>
