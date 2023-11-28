@@ -1,6 +1,8 @@
+const modelProjects = require("../models/projects.model.js");
 
-const getProjects = (req, res) => {
-    res.status(200).json({mensaje: "Hola con express"});
+const getProjects = async (req, res) => {
+    const result = await modelProjects.getAllProjects();
+    res.status(200).json(result);
 }
 
 const createProject = (req, res) => {
