@@ -14,19 +14,36 @@ const getProject = async (idProject) => {
         const [rows] = await pool.query(`SELECT * FROM projects WHERE id=?`, idProject);
 
         if (rows.length <= 0) {
-            //tendria que responder desde el controlador de errores
-            //el mensaje "resource not found" con "status: 404".
+            return null;
         }
         return (rows[0]);
       
     } catch(error) {
-        throw new Error(`Error fetching projects: ${error.message}`);
+        throw new Error(`Error fetching project: ${error.message}`);
+    }
+}
+
+const editProject = async (idProject, title, creator) => {
+    try {
+        const [result] = await pool.query(
+        "UPDATE projects SET title = ?, creator = ? WHERE id = ?",
+        [title, creator, idProject]);
+
+        if (result.affectedRows === 0) {
+            return null;
+        }
+
+        return await getProject(idProject);
+      
+    } catch(error) {
+        throw new Error(`Error edit project: ${error.message}`);
     }
 }
 
 const createProject = async (title, creator) => {
     try {
-        const [rows] = await pool.query("INSERT INTO projects (title, creator) VALUES (?,?)",
+        const [rows] = await pool.query(
+        "INSERT INTO projects (title, creator) VALUES (?,?)",
          [title, creator]);
         
         return {
@@ -40,8 +57,25 @@ const createProject = async (title, creator) => {
     }
 }
 
+const deleteProject = async (idProject) => {
+    try {
+        const [rows] = await pool.query(
+        "DELETE FROM projects WHERE id = ?",
+        idProject);
+
+        if (rows.affectedRows <= 0) {
+            return null;
+        }
+        return true;
+    } catch(error) {
+        throw new Error(`Error delete project: ${error.message}`);
+    }
+}
+
 module.exports = {
     getAllProjects,
     getProject,
-    createProject
+    editProject,
+    createProject,
+    deleteProject
 }

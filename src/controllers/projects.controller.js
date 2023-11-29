@@ -1,4 +1,5 @@
 const modelProjects = require("../models/projects.model.js");
+const errorsController = require("./errors.controller.js");
 
 const getProjects = async (req, res, next) => {
     try {
@@ -10,11 +11,17 @@ const getProjects = async (req, res, next) => {
 }
 
 const getProject = async (req, res, next) => {
+
     const { id } = req.params;
+    //Falta validar parametros validos
 
     try {
         const result = await modelProjects.getProject(id);
-        res.status(200).json(result);
+        if (result === null) {
+            errorsController.resourceNotFound(req, res);
+        } else {
+            res.status(200).json(result);
+        }
     } catch (error) {
         next(error); //Llama al middleware de errores con el error
     }
@@ -33,12 +40,39 @@ const createProject = async (req, res) => {
     }
 }
 
-const editProject = (req, res) => {
-    res.status(200).json({mensaje: "Editado con exito"});
+const editProject = async (req, res) => {
+
+    const { id } = req.params;
+    const { title, creator } = req.body;
+    //Falta validar datos.
+
+    try {
+        const result = await modelProjects.editProject(id, title, creator);
+
+        if (result === null) {
+            errorsController.resourceNotFound(req, res);
+        } else {
+            res.status(200).json(result);
+        }
+    } catch (error) {
+        next(error);
+    }
 }
 
-const deleteProject = (req, res) => {
-    res.status(200).json({mensaje: "Eliminado con exito"});
+const deleteProject = async (req, res) => {
+
+    const { id } = req.params;
+    try {
+        const result = await modelProjects.deleteProject(id);
+
+        if (result === null) {
+            errorsController.resourceNotFound(req, res);
+        } else {
+            res.sendStatus(204);
+        }
+    } catch (error) {
+        next(error);
+    }
 }
 
 module.exports = {
