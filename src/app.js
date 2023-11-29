@@ -1,9 +1,10 @@
 const express = require('express');
 const routesProjects = require('./routes/projects.routes.js');
-const errorsController= require('./controllers/errors.controller.js');
+const errorsController = require('./controllers/errors.controller.js');
+const config = require("./config.js");
 
-const port = 3000;
-const hostname = "127.0.0.1";
+const port = config.PORT;
+const hostname = config.HOST;
 
 const app = express();
 

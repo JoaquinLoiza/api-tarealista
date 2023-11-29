@@ -1,5 +1,6 @@
 const modelProjects = require("../models/projects.model.js");
 const errorsController = require("./errors.controller.js");
+const projectScheme = require("../schemes/project.scheme.js");
 
 const getProjects = async (req, res, next) => {
     try {
@@ -29,10 +30,14 @@ const getProject = async (req, res, next) => {
 
 const createProject = async (req, res) => {
 
-    const { title, creator } = req.body;
-    //Falta validar datos.
+    const validate = projectScheme.validateProject(req.body);
+    
+    if(validate.error) {
+       return res.status(400).json({error: JSON.parse(validate.error.message)});
+    }
 
     try {
+        const { title, creator } = req.body;
         const result = await modelProjects.createProject(title, creator);
         res.status(201).json(result);
     } catch (error) {
