@@ -9,8 +9,28 @@ const getProjects = async (req, res, next) => {
     }
 }
 
-const createProject = (req, res) => {
-    res.status(201).json({mensaje: "Creado con exito"});
+const getProject = async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const result = await modelProjects.getProject(id);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error); //Llama al middleware de errores con el error
+    }
+}
+
+const createProject = async (req, res) => {
+
+    const { title, creator } = req.body;
+    //Falta validar datos.
+
+    try {
+        const result = await modelProjects.createProject(title, creator);
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
 }
 
 const editProject = (req, res) => {
@@ -23,6 +43,7 @@ const deleteProject = (req, res) => {
 
 module.exports = {
     getProjects,
+    getProject,
     createProject,
     editProject,
     deleteProject
