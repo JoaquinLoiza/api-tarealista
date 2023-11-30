@@ -3,6 +3,3 @@ node_modules/
 
 #env enviroment
 .env
-
-#sql files
-*.sql

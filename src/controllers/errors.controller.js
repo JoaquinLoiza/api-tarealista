@@ -1,8 +1,14 @@
 
 const resourceNotFound = (req, res) => {
-    res.status(404).json({mensaje: "Error! recurso no encontrado"});
+    res.status(404).json({message: "Resource not found"});
+}
+
+const serverError = (err, req, res, next) => {
+    console.error('Error message:', err.message);
+    res.status(500).json({ message: "Something went wrong!" });
 }
 
 module.exports = {
-    resourceNotFound
+    resourceNotFound,
+    serverError
 }
