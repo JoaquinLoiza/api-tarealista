@@ -33,7 +33,8 @@ const createProject = async (req, res) => {
     const validate = projectScheme.validateProject(req.body);
     
     if(validate.error) {
-       return res.status(400).json({error: JSON.parse(validate.error.message)});
+        const [error] = JSON.parse(validate.error.message) ;
+        return errorsController.userInputInvalid(res, error.message);
     }
 
     try {
@@ -47,11 +48,15 @@ const createProject = async (req, res) => {
 
 const editProject = async (req, res) => {
 
-    const { id } = req.params;
-    const { title, creator } = req.body;
-    //Falta validar datos.
+    const validate = projectScheme.validateProject(req.body);
+    
+    if(validate.error) {
+       return res.status(400).json({error: JSON.parse(validate.error.message)});
+    }
 
     try {
+        const { id } = req.params;
+        const { title, creator } = req.body;
         const result = await modelProjects.editProject(id, title, creator);
 
         if (result === null) {
