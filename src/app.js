@@ -10,17 +10,11 @@ const whiteListOrigin = config.whiteListOrigin;
 
 const app = express();
 
+console.info("White list origins:");
+console.table(whiteListOrigin);
+
 const corsOptions = {
-    origin: function (origin, callback) {
-
-        console.log(origin);
-
-        if (whiteListOrigin.indexOf(origin) !== -1) {
-          callback(null, true)
-        } else {
-          callback(new Error('Not allowed by CORS'))
-        }
-    }
+    origin: [whiteListOrigin]
 }
 
 app.use(cors(corsOptions));
