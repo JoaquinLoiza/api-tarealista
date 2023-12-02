@@ -1,5 +1,6 @@
 const modelProjects = require("../models/projects.model.js");
 const errorsController = require("./errors.controller.js");
+const schemeProject = require("../scheme/project.scheme.js");
 
 const getProjects = async (req, res, next) => {
     try {
@@ -27,6 +28,14 @@ const getProject = async (req, res, next) => {
 }
 
 const createProject = async (req, res, next) => {
+
+    const validate = schemeProject.validateScheme(req.body);
+    
+    if(validate.error) {
+        const [error] = JSON.parse(validate.error.message) ;
+        return errorsController.userInputInvalid(res,error.message);
+    }
+    
     try {
         const { title, creator } = req.body;
         const result = await modelProjects.createProject(title, creator);
@@ -37,12 +46,17 @@ const createProject = async (req, res, next) => {
 }
 
 const editProject = async (req, res, next) => {
-
-    const { id } = req.params;
-    const { title, creator } = req.body;
-    //Falta validar datos.
-
+    
+    const validate = schemeProject.validateScheme(req.body);
+    
+    if(validate.error) {
+        const [error] = JSON.parse(validate.error.message) ;
+        return errorsController.userInputInvalid(res,error.message);
+    }
+    
     try {
+        const { id } = req.params;
+        const { title, creator } = req.body;
         const result = await modelProjects.editProject(id, title, creator);
 
         if (result === null) {

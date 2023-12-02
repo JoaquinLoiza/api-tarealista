@@ -9,6 +9,7 @@ const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_DATABASE = process.env.DB_DATABASE;
 const DB_PORT = process.env.DB_PORT;
+const whiteListOrigin = process.env.WHITE_LIST_ORIGIN.split(',');
 
 module.exports = {
     HOST,
@@ -17,5 +18,6 @@ module.exports = {
     DB_USER,
     DB_PASSWORD,
     DB_DATABASE,
-    DB_PORT
+    DB_PORT,
+    whiteListOrigin
 }
